@@ -1,15 +1,15 @@
-import { Entity, PrimaryGeneratedColumn, Column, Relation, OneToMany, JoinColumn  } from "typeorm";
-import { Link } from "./Link";
+import { Entity, PrimaryGeneratedColumn, Column, Relation, OneToMany, JoinColumn } from 'typeorm';
+import { Link } from './Link';
 
 @Entity()
 class User {
   @PrimaryGeneratedColumn('uuid')
   userId: string;
 
-  @Column({unique: true})
+  @Column({ unique: true })
   userName: string;
 
-  @Column({ unique: true})
+  @Column({ unique: true })
   passwordhash: string;
 
   @Column({ default: false })
@@ -21,7 +21,6 @@ class User {
   @OneToMany(() => Link, (links) => links.user)
   @JoinColumn()
   links: Relation<Link>[];
-
 }
 
-export {User};
+export { User };
