@@ -7,8 +7,14 @@ async function getUserByUserName(username: string): Promise<User | null> {
   return await userRepository.findOne({ where: { username } });
 }
 
-async function getUserById(userId: string): Promise<User | null> {
-  return await userRepository.findOne({ where: { userId } });
+async function getUserById(userId: string): Promise<User> {
+  const selectedUser = await userRepository
+    .createQueryBuilder('user')
+    .where('userId', { userId })
+    .select(['user.userId', 'user.isPro', 'user.isAdmin', 'user.links'])
+    .getOne();
+
+  return selectedUser;
 }
 
 async function addNewUser(username: string, passwordHash: string): Promise<User> {
@@ -21,4 +27,4 @@ async function addNewUser(username: string, passwordHash: string): Promise<User>
   return newUser;
 }
 
-export { getUserByUserName, addNewUser };
+export { getUserByUserName, addNewUser, getUserById };
