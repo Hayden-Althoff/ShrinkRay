@@ -14,11 +14,11 @@ async function getLinkById(linkId: string): Promise<Link | null> {
   return selectedLink;
 }
 
-function createLinkId (originalUrl: string, userId: string): string {
+function createLinkId(originalUrl: string, userId: string): string {
   const md5 = createHash('md5');
   md5.update(originalUrl + userId);
   const urlHash = md5.digest('base64url');
-  const linkId = /* TODO: Get only the first 9 characters of `urlHash` */;
+  const linkId = urlHash.slice(0, 9);
 
   return linkId;
 }
