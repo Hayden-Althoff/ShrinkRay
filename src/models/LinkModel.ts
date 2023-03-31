@@ -1,3 +1,4 @@
+import { createHash } from 'crypto';
 import { Link } from '../entities/Link';
 import { AppDataSource } from '../dataSource';
 
@@ -11,6 +12,15 @@ async function getLinkById(linkId: string): Promise<Link | null> {
     .getOne();
 
   return selectedLink;
+}
+
+function createLinkId (originalUrl: string, userId: string): string {
+  const md5 = createHash('md5');
+  md5.update(originalUrl + userId);
+  const urlHash = md5.digest('base64url');
+  const linkId = /* TODO: Get only the first 9 characters of `urlHash` */;
+
+  return linkId;
 }
 
 export { getLinkById };

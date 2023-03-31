@@ -3,6 +3,7 @@ import 'express-async-errors'; // Enable default error handling for async errors
 import express, { Express, Request, Response } from 'express';
 import session from 'express-session';
 import connectSqlite3 from 'connect-sqlite3';
+import { createHash } from 'crypto';
 import { registerUser, logIn } from './controllers/UserController';
 
 const { PORT, DATABASE_NAME, COOKIE_SECRET } = process.env;
@@ -30,4 +31,11 @@ app.post('/api/login', logIn);
 app.listen(PORT, () => {
   console.log(`Server listening on port ${PORT}`);
   console.log(`Database is called ${DATABASE_NAME}`);
+  const md5 = createHash('md5');
+  md5.update('https://youtube.com/watch?v=dQw4w9WgXcQ');
+  const urlHash = md5.digest('base64url');
+  const linkId = urlHash.slice(0, 9);
+
+  console.log(`MD5 Hash: ${urlHash}`);
+  console.log(`linkId: ${linkId}`);
 });
