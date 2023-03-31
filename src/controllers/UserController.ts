@@ -18,4 +18,26 @@ async function registerUser(req: Request, res: Response): Promise<void> {
   }
 }
 
-export { registerUser };
+async function logIn(req: Request, res: Response): Promise<void> {
+  const { username, password } = req.body as NewUserRequest;
+
+  const user = await getUserByUserName(username);
+
+  // Check if the user account exists for that username
+  if (!user) {
+    res.sendStatus(404); // 404 Not Found (403 Forbidden would also make a lot of sense here)
+    return;
+  }
+
+  // The account exists so now we can check their password
+  const { passwordhash } = user;
+
+  // If the password does not match
+  if (!(await argon2.verify(passwordhash, password))) {
+    res.sendStatus(404); // 404 Not Found (403 Forbidden would also make a lot of sense here)
+  }
+
+  res.sendStatus(200);
+}
+
+export { registerUser, logIn };
