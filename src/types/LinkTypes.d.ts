@@ -7,6 +7,6 @@ type TargetLink = {
 };
 
 type DeleteRequest = {
-  linkuserId: string;
+  userId: string;
   linkId: string;
 };
