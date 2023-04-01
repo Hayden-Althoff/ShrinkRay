@@ -10,7 +10,7 @@ import {
   deleteLink,
 } from '../models/LinkModel';
 import { getUserById } from '../models/UserModel';
-import { User } from '../entities/User';
+import { Link } from '../entities/Link';
 
 async function shortenUrl(req: Request, res: Response): Promise<void> {
   if (!req.session.isLoggedIn) {
