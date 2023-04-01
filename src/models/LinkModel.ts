@@ -1,6 +1,7 @@
 import { createHash } from 'crypto';
 import { Link } from '../entities/Link';
 import { AppDataSource } from '../dataSource';
+import { User } from '../entities/User';
 
 const linkRepository = AppDataSource.getRepository(Link);
 
@@ -23,4 +24,15 @@ function createLinkId(originalUrl: string, userId: string): string {
   return linkId;
 }
 
-export { getLinkById };
+async function createNewLink(originalUrl: string, linkId: string, creator: User): Promise<Link> {
+  let newLink = new Link();
+  newLink.user = creator;
+  newLink.linkId = linkId;
+  newLink.originalUrl = originalUrl;
+
+  newLink = await linkRepository.save(newLink);
+
+  return newLink;
+}
+
+export { getLinkById, createNewLink, createLinkId };

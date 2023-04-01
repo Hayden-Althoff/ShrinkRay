@@ -10,8 +10,8 @@ async function getUserByUserName(username: string): Promise<User | null> {
 async function getUserById(userId: string): Promise<User> {
   const selectedUser = await userRepository
     .createQueryBuilder('user')
-    .where('userId', { userId })
-    .select(['user.userId', 'user.isPro', 'user.isAdmin', 'user.links'])
+    .where(userId)
+    .select(['user.userId', 'user.username', 'user.isPro', 'user.isAdmin', 'user.links'])
     .getOne();
 
   return selectedUser;
