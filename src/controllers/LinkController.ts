@@ -1,6 +1,13 @@
 import { Request, Response } from 'express';
 import { parseDatabaseError } from '../utils/db-utils';
-import { createLinkId, createNewLink } from '../models/LinkModel';
+import {
+  createLinkId,
+  createNewLink,
+  getLinkById,
+  updateLinkVisits,
+  getLinksByUserId,
+  getLinksByUserIdForOwnAccount,
+} from '../models/LinkModel';
 import { getUserById } from '../models/UserModel';
 import { User } from '../entities/User';
 
@@ -44,4 +51,35 @@ async function shortenUrl(req: Request, res: Response): Promise<void> {
   // Respond with status 201 if the insert was successful
 }
 
-export { shortenUrl };
+async function getOriginalUrl(req: Request, res: Response): Promise<void> {
+  const { targetLink } = req.params as TargetLink; // Retrieve the link data using the targetLinkId from the path parameter
+  const link = await getLinkById(targetLink);
+
+  if (!link) {
+    res.sendStatus(404);
+    return;
+  }
+  // Check if you got back `null`
+  // send the appropriate response
+
+  await updateLinkVisits(link);
+  // Call the appropriate function to increment the number of hits and the last accessed date
+
+  // Redirect the client to the original URL
+  res.redirect(link.originalUrl);
+}
+
+async function getAllLinks(req: Request, res: Response): Promise<Link[]> {
+  const { userId } = req.params as UserIdRequest;
+  if (!req.session.isLoggedIn || req.session.AuthenticatedUserData.userId !== userId) {
+    const links = await getLinksByUserId(userId);
+    res.json(links);
+    return links;
+  }
+
+  const links = await getLinksByUserIdForOwnAccount(userId);
+  res.json(links);
+  return links;
+}
+
+export { shortenUrl, getOriginalUrl, getAllLinks };
