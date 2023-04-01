@@ -98,4 +98,4 @@ async function deleteUserLink(req: Request, res: Response): Promise<void> {
   res.sendStatus(200);
 }
 
-export { shortenUrl, getOriginalUrl, getAllLinks };
+export { shortenUrl, getOriginalUrl, getAllLinks, deleteUserLink };
