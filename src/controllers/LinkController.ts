@@ -7,6 +7,7 @@ import {
   updateLinkVisits,
   getLinksByUserId,
   getLinksByUserIdForOwnAccount,
+  deleteLink,
 } from '../models/LinkModel';
 import { getUserById } from '../models/UserModel';
 import { User } from '../entities/User';
@@ -80,6 +81,21 @@ async function getAllLinks(req: Request, res: Response): Promise<Link[]> {
   const links = await getLinksByUserIdForOwnAccount(userId);
   res.json(links);
   return links;
+}
+
+async function deleteUserLink(req: Request, res: Response): Promise<void> {
+  const { userId, linkId } = req.params as DeleteRequest;
+
+  if (
+    userId !== req.session.AuthenticatedUserData.userId ||
+    !req.session.AuthenticatedUserData.isAdmin
+  ) {
+    res.sendStatus(403);
+    return;
+  }
+
+  await deleteLink(userId, linkId);
+  res.sendStatus(200);
 }
 
 export { shortenUrl, getOriginalUrl, getAllLinks };

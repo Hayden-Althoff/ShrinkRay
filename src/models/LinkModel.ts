@@ -79,6 +79,15 @@ async function getLinksByUserIdForOwnAccount(userId: string): Promise<Link[]> {
   return links;
 }
 
+async function deleteLink(userId: string, linkId: string): Promise<void> {
+  await linkRepository
+    .createQueryBuilder('link')
+    .delete()
+    .where('userId', { userId })
+    .andWhere('linkId', { linkId })
+    .execute();
+}
+
 export {
   getLinkById,
   createNewLink,
@@ -86,4 +95,5 @@ export {
   updateLinkVisits,
   getLinksByUserId,
   getLinksByUserIdForOwnAccount,
+  deleteLink,
 };
