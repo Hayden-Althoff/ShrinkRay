@@ -12,6 +12,8 @@ const { PORT, DATABASE_NAME, COOKIE_SECRET } = process.env;
 const SQLiteStore = connectSqlite3(session);
 
 const app: Express = express();
+app.use(express.static('public', { extensions: ['html'] }));
+app.use(express.urlencoded({ extended: false }));
 
 app.use(
   session({
@@ -26,7 +28,7 @@ app.use(
 
 app.use(express.json());
 
-app.post('/api/user', registerUser);
+app.post('/api/users', registerUser);
 app.post('/api/login', logIn);
 app.post('/api/link', shortenUrl);
 app.get('/:targetLinkId', getOriginalUrl);

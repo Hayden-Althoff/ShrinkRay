@@ -22,7 +22,8 @@ async function shortenUrl(req: Request, res: Response): Promise<void> {
 
   const user = await getUserById(userId); // Retrieve the user's account data using their ID
   if (!user) {
-    res.sendStatus(404);
+    // res.sendStatus(404);
+    res.redirect('/login');
     return;
   } // Check if you got back `null`
   // send the appropriate response
